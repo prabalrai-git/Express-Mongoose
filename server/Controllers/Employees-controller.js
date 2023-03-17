@@ -56,7 +56,6 @@ const addNewEmployee = async (req, res, next) => {
 
 const deleteEmployee = async (req, res) => {
   const id = req.params.id;
-  console.log(id, typeof id);
   try {
     const result = await Employees.findByIdAndRemove(id);
     if (!result) {
@@ -69,9 +68,30 @@ const deleteEmployee = async (req, res) => {
   }
 };
 
+const updateEmployee = async (req, res) => {
+  const id = req.params.id;
+  console.log(id, req.body);
+  try {
+    const result = await Employees.findById(id);
+    if (!result) {
+      return res.status(404).send({ message: "User not found" });
+    }
+    result.name = req.body.name;
+    result.position = req.body.position;
+    result.email = req.body.email;
+    result.address = req.body.address;
+    const updatedUser = await result.save();
+    res.send(updatedUser);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({ message: "Error updating user" });
+  }
+};
+
 module.exports = {
   getAllEmployees,
   addNewEmployee,
   deleteEmployee,
   getEmployee,
+  updateEmployee,
 };
