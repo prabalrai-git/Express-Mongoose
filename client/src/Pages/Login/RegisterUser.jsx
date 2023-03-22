@@ -1,9 +1,13 @@
 import { Button, Checkbox, Form, Input, message } from "antd";
 import axios from "axios";
+import { Navigate, useNavigate } from "react-router-dom";
 
 function RegisterUser() {
+  const navigate = useNavigate();
+
   const onFinish = async (values) => {
     const { username, password } = values;
+
     const url = "http://localhost:5000/api/user/login";
 
     const data = {
@@ -14,6 +18,7 @@ function RegisterUser() {
       const result = await axios.post(url, data);
       if (result.data.successMsg) {
         message.info("User Logged in Successfully");
+        navigate("/employeetable");
       }
     } catch (error) {
       console.log(error);
@@ -38,8 +43,9 @@ function RegisterUser() {
         <h2
           style={{ textAlign: "center", marginBottom: 40, fontWeight: "600" }}
         >
-          Regiter New User
+          Login
         </h2>
+
         <Form
           name="basic"
           labelCol={{
